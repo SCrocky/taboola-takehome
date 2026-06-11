@@ -1,0 +1,81 @@
+startDelaySeconds: 0
+ssl: false
+lowercaseOutputName: true
+lowercaseOutputLabelNames: true
+whitelistObjectNames:
+  - "metrics:*"
+rules:
+  - pattern: 'metrics<name=([^.]+)\.driver\.jvm\.heap\.used><>Value'
+    name: spark_jvm_heap_used_bytes
+    labels: {app: "$1"}
+    type: GAUGE
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.jvm\.heap\.max><>Value'
+    name: spark_jvm_heap_max_bytes
+    labels: {app: "$1"}
+    type: GAUGE
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.jvm\.non-heap\.used><>Value'
+    name: spark_jvm_non_heap_used_bytes
+    labels: {app: "$1"}
+    type: GAUGE
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.jvm\.PS-Scavenge\.time><>Value'
+    name: spark_gc_minor_time_ms
+    labels: {app: "$1"}
+    type: COUNTER
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.jvm\.PS-MarkSweep\.time><>Value'
+    name: spark_gc_major_time_ms
+    labels: {app: "$1"}
+    type: COUNTER
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.executor\.threadpool\.activeTasks><>Value'
+    name: spark_executor_active_tasks
+    labels: {app: "$1"}
+    type: GAUGE
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.executor\.threadpool\.completeTasks><>Value'
+    name: spark_executor_complete_tasks
+    labels: {app: "$1"}
+    type: COUNTER
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.executor\.threadpool\.startedTasks><>Value'
+    name: spark_executor_started_tasks
+    labels: {app: "$1"}
+    type: COUNTER
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.DAGScheduler\.stage\.runningStages><>Value'
+    name: spark_running_stages
+    labels: {app: "$1"}
+    type: GAUGE
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.DAGScheduler\.stage\.waitingStages><>Value'
+    name: spark_waiting_stages
+    labels: {app: "$1"}
+    type: GAUGE
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.BlockManager\.memory\.memUsed_MB><>Value'
+    name: spark_block_manager_memory_used_mb
+    labels: {app: "$1"}
+    type: GAUGE
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.BlockManager\.memory\.maxMem_MB><>Value'
+    name: spark_block_manager_memory_max_mb
+    labels: {app: "$1"}
+    type: GAUGE
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.spark\.streaming\.([^.]+)\.inputRate-total><>Value'
+    name: spark_streaming_input_rate
+    labels: {app: "$1", query: "$2"}
+    type: GAUGE
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.spark\.streaming\.([^.]+)\.processingRate-total><>Value'
+    name: spark_streaming_processing_rate
+    labels: {app: "$1", query: "$2"}
+    type: GAUGE
+
+  - pattern: 'metrics<name=([^.]+)\.driver\.spark\.streaming\.([^.]+)\.latency><>Value'
+    name: spark_streaming_latency_ms
+    labels: {app: "$1", query: "$2"}
+    type: GAUGE

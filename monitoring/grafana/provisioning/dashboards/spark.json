@@ -1,0 +1,96 @@
+{
+  "title": "Spark Pipeline",
+  "uid": "spark-pipeline",
+  "schemaVersion": 37,
+  "version": 1,
+  "refresh": "5s",
+  "timezone": "utc",
+  "time": {"from": "now-15m", "to": "now"},
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "JVM Memory",
+      "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "bytes"}, "overrides": []},
+      "targets": [
+        {"datasource": {"uid": "prometheus"}, "expr": "jvm_memory_bytes_used{area=\"heap\"}", "legendFormat": "Heap Used", "refId": "A"},
+        {"datasource": {"uid": "prometheus"}, "expr": "jvm_memory_bytes_max{area=\"heap\"}", "legendFormat": "Heap Max", "refId": "B"},
+        {"datasource": {"uid": "prometheus"}, "expr": "jvm_memory_bytes_used{area=\"nonheap\"}", "legendFormat": "Non-Heap Used", "refId": "C"}
+      ],
+      "datasource": {"uid": "prometheus"}
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Executor Activity",
+      "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "targets": [
+        {"datasource": {"uid": "prometheus"}, "expr": "spark_executor_active_tasks", "legendFormat": "Active Tasks", "refId": "A"},
+        {"datasource": {"uid": "prometheus"}, "expr": "spark_running_stages", "legendFormat": "Running Stages", "refId": "B"},
+        {"datasource": {"uid": "prometheus"}, "expr": "spark_waiting_stages", "legendFormat": "Waiting Stages", "refId": "C"}
+      ],
+      "datasource": {"uid": "prometheus"}
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "CPU Usage",
+      "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "percentunit"}, "overrides": []},
+      "targets": [
+        {"datasource": {"uid": "prometheus"}, "expr": "rate(process_cpu_seconds_total[1m])", "legendFormat": "CPU cores used", "refId": "A"}
+      ],
+      "datasource": {"uid": "prometheus"}
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "GC Time (% of wall time)",
+      "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "percent"}, "overrides": []},
+      "targets": [
+        {"datasource": {"uid": "prometheus"}, "expr": "rate(jvm_gc_collection_seconds_sum{gc=\"PS Scavenge\"}[20s]) * 100", "legendFormat": "Minor GC (PS Scavenge)", "refId": "A"},
+        {"datasource": {"uid": "prometheus"}, "expr": "rate(jvm_gc_collection_seconds_sum{gc=\"PS MarkSweep\"}[20s]) * 100", "legendFormat": "Major GC (PS MarkSweep)", "refId": "B"}
+      ],
+      "datasource": {"uid": "prometheus"}
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Streaming Throughput",
+      "gridPos": {"x": 0, "y": 16, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "targets": [
+        {"datasource": {"uid": "prometheus"}, "expr": "spark_streaming_input_rate", "legendFormat": "Input Rate (rows/s)", "refId": "A"},
+        {"datasource": {"uid": "prometheus"}, "expr": "spark_streaming_processing_rate", "legendFormat": "Processing Rate (rows/s)", "refId": "B"}
+      ],
+      "datasource": {"uid": "prometheus"}
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Batch Latency",
+      "gridPos": {"x": 12, "y": 16, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "ms"}, "overrides": []},
+      "targets": [
+        {"datasource": {"uid": "prometheus"}, "expr": "spark_streaming_latency_ms", "legendFormat": "Batch Latency (ms)", "refId": "A"}
+      ],
+      "datasource": {"uid": "prometheus"}
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Thread Activity",
+      "gridPos": {"x": 0, "y": 24, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "targets": [
+        {"datasource": {"uid": "prometheus"}, "expr": "jvm_threads_current", "legendFormat": "Current", "refId": "A"},
+        {"datasource": {"uid": "prometheus"}, "expr": "jvm_threads_daemon", "legendFormat": "Daemon", "refId": "B"},
+        {"datasource": {"uid": "prometheus"}, "expr": "jvm_threads_peak", "legendFormat": "Peak", "refId": "C"}
+      ],
+      "datasource": {"uid": "prometheus"}
+    }
+  ]
+}
